@@ -1,0 +1,12 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/name=Local
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Multi_Purpose_Data_Logger Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Single_Channel_Logger Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Temp_Data_Logger_3 Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:adc_with_gsm Debug,org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:discovery_uart_demo Debug
+eclipse.preferences.version=1
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Multi_Purpose_Data_Logger\ Debug/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Multi_Purpose_Data_Logger\ Debug/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Single_Channel_Logger\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Temp_Data_Logger_3\ Debug/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Temp_Data_Logger_3\ Debug/activeLaunchTarget=null\:---
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:adc_with_gsm\ Debug/activeLaunchMode=debug
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:discovery_uart_demo\ Debug/activeLaunchMode=run
