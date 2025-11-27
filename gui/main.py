@@ -24,14 +24,14 @@ import numpy as np
 # Config
 # ------------------------------------------------------------
 FAKE_FS = 2880  # Hz, fake sampling rate for the demo
-ADC_MAX = 4095
+ADC_MAX = 255
 VREF = 3.3
 NUM_CHANNELS = 2
 
-# UART frame: 128 samples per channel, interleaved, 2 bytes each = 512 bytes
+# UART frame: 128 samples per channel, interleaved, 1 byte each = 256 bytes
 SAMPLES_PER_CHANNEL = 128
 SAMPLES_PER_FRAME = SAMPLES_PER_CHANNEL * NUM_CHANNELS  # 256 total samples
-FRAME_BYTES = SAMPLES_PER_FRAME * 2  # 512 bytes
+FRAME_BYTES = SAMPLES_PER_FRAME * 1  # 256 bytes
 BUFFER_SIZE = 8000  # larger buffer for each channel
 
 # ------------------------------------------------------------
@@ -54,20 +54,21 @@ class FakeSource:
         """Generate new samples and update circular buffers for both channels."""
         for _ in range(60):
             # Channel 1: 80 Hz sine
-            v1 = 2048 + 700 * math.sin(2 * math.pi * self.freq1 * self.t)
+            # Center at 128, amplitude ~100
+            v1 = 128 + 100 * math.sin(2 * math.pi * self.freq1 * self.t)
             v1 += random.randint(-self.noise, self.noise)
             # Add random spikes (simulating noise glitches)
             if random.random() < 0.01:  # 1% chance
-                v1 += random.choice([-1000, 1000])
+                v1 += random.choice([-50, 50])
             v1 = max(0, min(self.adc_max, int(v1)))
             self.buf_ch1.append(v1)
             
             # Channel 2: 120 Hz sine with different amplitude
-            v2 = 2048 + 500 * math.sin(2 * math.pi * self.freq2 * self.t)
+            v2 = 128 + 80 * math.sin(2 * math.pi * self.freq2 * self.t)
             v2 += random.randint(-self.noise, self.noise)
             # Add random spikes
             if random.random() < 0.01:
-                v2 += random.choice([-1000, 1000])
+                v2 += random.choice([-50, 50])
             v2 = max(0, min(self.adc_max, int(v2)))
             self.buf_ch2.append(v2)
             
@@ -148,24 +149,18 @@ class SerialReader(threading.Thread):
                     # Remove consumed bytes
                     del self._buf[:self.frame_bytes]
 
-                    # Convert to samples (little-endian 16-bit, lower 12 bits valid)
+                    # Convert to samples (8-bit)
                     # Data is interleaved: {C1S1, C2S1, C1S2, C2S2, ...}
                     samples_ch1 = []
                     samples_ch2 = []
-                    for i in range(0, len(frame_bytes), 4):  # step by 4 bytes (2 samples)
+                    for i in range(0, len(frame_bytes), 2):  # step by 2 bytes (2 samples)
                         # Channel 1 sample
-                        lo1 = frame_bytes[i]
-                        hi1 = frame_bytes[i + 1]
-                        raw1 = (hi1 << 8) | lo1
-                        adc12_ch1 = raw1 & 0x0FFF
-                        samples_ch1.append(adc12_ch1)
+                        raw1 = frame_bytes[i]
+                        samples_ch1.append(raw1)
                         
                         # Channel 2 sample
-                        lo2 = frame_bytes[i + 2]
-                        hi2 = frame_bytes[i + 3]
-                        raw2 = (hi2 << 8) | lo2
-                        adc12_ch2 = raw2 & 0x0FFF
-                        samples_ch2.append(adc12_ch2)
+                        raw2 = frame_bytes[i + 1]
+                        samples_ch2.append(raw2)
                     
                     frame_data = {'ch1': samples_ch1, 'ch2': samples_ch2}
 
@@ -260,8 +255,8 @@ class MainWindow(QMainWindow):
         # Trigger state - Independent per channel
         self.trigger_mode = "AUTO"     # AUTO / NORMAL
         self.trigger_rising = True
-        self.threshold_ch1 = 2048      # ADC counts
-        self.threshold_ch2 = 2048      # ADC counts
+        self.threshold_ch1 = 128      # ADC counts
+        self.threshold_ch2 = 128      # ADC counts
         
         # Scaling
         self.volts_per_div = 1.0       # V/div
