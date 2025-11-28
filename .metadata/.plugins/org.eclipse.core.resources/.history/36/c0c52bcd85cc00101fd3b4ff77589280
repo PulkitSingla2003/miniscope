@@ -79,39 +79,18 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
 {
 //	CDC_Transmit_FS(adc_buf, ADC_BUF_LEN/2);
 	half_ready = 1;
-	HAL_TIM_Base_Stop(&htim2);   // pause sampling while we ship the snapshot
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 //	CDC_Transmit_FS(adc_buf, ADC_BUF_LEN * 2);
 	full_ready = 1;
-	HAL_TIM_Base_Stop(&htim2);   // pause sampling while we ship the snapshot
 }
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void resume_sampling(void)
-{
-	/* Clear any stale flags before we start filling again */
-	half_ready = 0;
-	full_ready = 0;
-
-	HAL_TIM_Base_Start(&htim2);
-}
-
-static void transmit_snapshot(uint16_t *buf, uint16_t sample_count)
-{
-	uint16_t byte_count = sample_count * sizeof(uint16_t);
-
-	/* Block until USB CDC can accept the packet, keeping the ADC stopped */
-	while (CDC_Transmit_FS((uint8_t *)buf, byte_count) == USBD_BUSY)
-	{
-		HAL_Delay(1);
-	}
-}
 
 /* USER CODE END 0 */
 
@@ -155,8 +134,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 //  uint8_t msg[] = "Hello World!\r\n";
 
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buf, ADC_BUF_LEN);
-	HAL_TIM_Base_Start(&htim2);
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buf, ADC_BUF_LEN);
+  HAL_TIM_Base_Start(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -175,15 +154,13 @@ int main(void)
 	      {
 	          half_ready = 0;
 
-	          transmit_snapshot(adc_buf, ADC_BUF_LEN / 2);
-	          resume_sampling();
+	          CDC_Transmit_FS(adc_buf, ADC_BUF_LEN);
 	      }
 	  if (full_ready)
 	      {
 	          full_ready = 0;
 
-	          transmit_snapshot(&adc_buf[ADC_BUF_LEN/2], ADC_BUF_LEN / 2);
-	          resume_sampling();
+	          CDC_Transmit_FS(&adc_buf[ADC_BUF_LEN/2], ADC_BUF_LEN);
 	      }
 
 

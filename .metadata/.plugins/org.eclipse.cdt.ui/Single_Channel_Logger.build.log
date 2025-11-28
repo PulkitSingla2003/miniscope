@@ -1,4 +1,4 @@
-11:40:04 **** Build of configuration Debug for project Single_Channel_Logger ****
+22:57:05 **** Incremental Build of configuration Debug for project Single_Channel_Logger ****
 make -j8 all 
 arm-none-eabi-size  Single_Channel_Logger.elf 
    text	   data	    bss	    dec	    hex	filename
@@ -6,5 +6,5 @@ arm-none-eabi-size  Single_Channel_Logger.elf
 Finished building: default.size.stdout
  
 
-11:40:04 Build Finished. 0 errors, 0 warnings. (took 301ms)
+22:57:06 Build Finished. 0 errors, 0 warnings. (took 288ms)
 

@@ -3228,3 +3228,378 @@ Finished building: default.size.stdout
  
 Finished building: discovery_uart_demo.list
  
+22:25:06 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44808	    252	  10292	  55352	   d838	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+22:27:25 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44968	    252	  10292	  55512	   d8d8	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+22:29:49 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  45060	    252	  10292	  55604	   d934	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+22:30:49 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:157:35: warning: passing argument 1 of 'CDC_Transmit_FS' from incompatible pointer type [-Wincompatible-pointer-types]
+  157 |                   CDC_Transmit_FS(adc_buf, ADC_BUF_LEN);
+      |                                   ^~~~~~~
+      |                                   |
+      |                                   uint16_t * {aka short unsigned int *}
+In file included from ../Core/Src/main.c:25:
+../USB_DEVICE/App/usbd_cdc_if.h:109:34: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
+  109 | uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+      |                         ~~~~~~~~~^~~
+../Core/Src/main.c:163:35: warning: passing argument 1 of 'CDC_Transmit_FS' from incompatible pointer type [-Wincompatible-pointer-types]
+  163 |                   CDC_Transmit_FS(&adc_buf[ADC_BUF_LEN/2], ADC_BUF_LEN);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+      |                                   |
+      |                                   uint16_t * {aka short unsigned int *}
+../USB_DEVICE/App/usbd_cdc_if.h:109:34: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
+  109 | uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+      |                         ~~~~~~~~~^~~
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44632	    252	  10292	  55176	   d788	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+22:57:05 **** Incremental Build of configuration Debug for project Multi_Purpose_Data_Logger ****
+make -j8 all 
+arm-none-eabi-size  Multi_Purpose_Data_Logger.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37140	    616	   3808	  41564	   a25c	Multi_Purpose_Data_Logger.elf
+Finished building: default.size.stdout
+ 
+22:57:05 **** Incremental Build of configuration Debug for project Single_Channel_Logger ****
+make -j8 all 
+arm-none-eabi-size  Single_Channel_Logger.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39640	    504	   3160	  43304	   a928	Single_Channel_Logger.elf
+Finished building: default.size.stdout
+ 
+22:57:06 **** Incremental Build of configuration Debug for project Temp_Data_Logger_3 ****
+make -j8 all 
+arm-none-eabi-size  Temp_Data_Logger_3.elf 
+   text	   data	    bss	    dec	    hex	filename
+  36316	    472	   3128	  39916	   9bec	Temp_Data_Logger_3.elf
+Finished building: default.size.stdout
+ 
+22:57:06 **** Incremental Build of configuration Debug for project adc_with_gsm ****
+make -j8 all 
+arm-none-eabi-size  adc_with_gsm.elf 
+   text	   data	    bss	    dec	    hex	filename
+  46996	    156	   5460	  52612	   cd84	adc_with_gsm.elf
+Finished building: default.size.stdout
+ 
+22:57:07 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_ADC_ConvCpltCallback':
+../Core/Src/main.c:107:5: warning: 'main' is normally a non-static function [-Wmain]
+  107 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:255:13: error: invalid storage class for function 'MX_ADC1_Init'
+  255 | static void MX_ADC1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:316:13: error: invalid storage class for function 'MX_I2C1_Init'
+  316 | static void MX_I2C1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:350:13: error: invalid storage class for function 'MX_I2S3_Init'
+  350 | static void MX_I2S3_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:384:13: error: invalid storage class for function 'MX_SPI1_Init'
+  384 | static void MX_SPI1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:422:13: error: invalid storage class for function 'MX_TIM2_Init'
+  422 | static void MX_TIM2_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:467:13: error: invalid storage class for function 'MX_USART2_UART_Init'
+  467 | static void MX_USART2_UART_Init(void)
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:498:13: error: invalid storage class for function 'MX_DMA_Init'
+  498 | static void MX_DMA_Init(void)
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:516:13: error: invalid storage class for function 'MX_GPIO_Init'
+  516 | static void MX_GPIO_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:626:1: error: expected declaration or statement at end of input
+  626 | }
+      | ^
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:70:13: warning: 'MX_GPIO_Init' used but never defined
+   70 | static void MX_GPIO_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:71:13: warning: 'MX_DMA_Init' used but never defined
+   71 | static void MX_DMA_Init(void);
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:72:13: warning: 'MX_I2C1_Init' used but never defined
+   72 | static void MX_I2C1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:73:13: warning: 'MX_I2S3_Init' used but never defined
+   73 | static void MX_I2S3_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:74:13: warning: 'MX_SPI1_Init' used but never defined
+   74 | static void MX_SPI1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:75:13: warning: 'MX_USART2_UART_Init' used but never defined
+   75 | static void MX_USART2_UART_Init(void);
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:76:13: warning: 'MX_ADC1_Init' used but never defined
+   76 | static void MX_ADC1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:77:13: warning: 'MX_TIM2_Init' used but never defined
+   77 | static void MX_TIM2_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:617:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  617 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:516:13: warning: 'MX_GPIO_Init' defined but not used [-Wunused-function]
+  516 | static void MX_GPIO_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:498:13: warning: 'MX_DMA_Init' defined but not used [-Wunused-function]
+  498 | static void MX_DMA_Init(void)
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:467:13: warning: 'MX_USART2_UART_Init' defined but not used [-Wunused-function]
+  467 | static void MX_USART2_UART_Init(void)
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:422:13: warning: 'MX_TIM2_Init' defined but not used [-Wunused-function]
+  422 | static void MX_TIM2_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:384:13: warning: 'MX_SPI1_Init' defined but not used [-Wunused-function]
+  384 | static void MX_SPI1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:350:13: warning: 'MX_I2S3_Init' defined but not used [-Wunused-function]
+  350 | static void MX_I2S3_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:316:13: warning: 'MX_I2C1_Init' defined but not used [-Wunused-function]
+  316 | static void MX_I2C1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:255:13: warning: 'MX_ADC1_Init' defined but not used [-Wunused-function]
+  255 | static void MX_ADC1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:209:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  209 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:107:5: warning: 'main' defined but not used [-Wunused-function]
+  107 | int main(void)
+      |     ^~~~
+make: *** [Core/Src/subdir.mk:34: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+22:57:40 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'HAL_ADC_ConvCpltCallback':
+../Core/Src/main.c:107:5: warning: 'main' is normally a non-static function [-Wmain]
+  107 | int main(void)
+      |     ^~~~
+../Core/Src/main.c:255:13: error: invalid storage class for function 'MX_ADC1_Init'
+  255 | static void MX_ADC1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:316:13: error: invalid storage class for function 'MX_I2C1_Init'
+  316 | static void MX_I2C1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:350:13: error: invalid storage class for function 'MX_I2S3_Init'
+  350 | static void MX_I2S3_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:384:13: error: invalid storage class for function 'MX_SPI1_Init'
+  384 | static void MX_SPI1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:422:13: error: invalid storage class for function 'MX_TIM2_Init'
+  422 | static void MX_TIM2_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:467:13: error: invalid storage class for function 'MX_USART2_UART_Init'
+  467 | static void MX_USART2_UART_Init(void)
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:498:13: error: invalid storage class for function 'MX_DMA_Init'
+  498 | static void MX_DMA_Init(void)
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:516:13: error: invalid storage class for function 'MX_GPIO_Init'
+  516 | static void MX_GPIO_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:626:1: error: expected declaration or statement at end of input
+  626 | }
+      | ^
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:70:13: warning: 'MX_GPIO_Init' used but never defined
+   70 | static void MX_GPIO_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:71:13: warning: 'MX_DMA_Init' used but never defined
+   71 | static void MX_DMA_Init(void);
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:72:13: warning: 'MX_I2C1_Init' used but never defined
+   72 | static void MX_I2C1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:73:13: warning: 'MX_I2S3_Init' used but never defined
+   73 | static void MX_I2S3_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:74:13: warning: 'MX_SPI1_Init' used but never defined
+   74 | static void MX_SPI1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:75:13: warning: 'MX_USART2_UART_Init' used but never defined
+   75 | static void MX_USART2_UART_Init(void);
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:76:13: warning: 'MX_ADC1_Init' used but never defined
+   76 | static void MX_ADC1_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:77:13: warning: 'MX_TIM2_Init' used but never defined
+   77 | static void MX_TIM2_Init(void);
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:617:6: warning: 'Error_Handler' defined but not used [-Wunused-function]
+  617 | void Error_Handler(void)
+      |      ^~~~~~~~~~~~~
+../Core/Src/main.c:516:13: warning: 'MX_GPIO_Init' defined but not used [-Wunused-function]
+  516 | static void MX_GPIO_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:498:13: warning: 'MX_DMA_Init' defined but not used [-Wunused-function]
+  498 | static void MX_DMA_Init(void)
+      |             ^~~~~~~~~~~
+../Core/Src/main.c:467:13: warning: 'MX_USART2_UART_Init' defined but not used [-Wunused-function]
+  467 | static void MX_USART2_UART_Init(void)
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:422:13: warning: 'MX_TIM2_Init' defined but not used [-Wunused-function]
+  422 | static void MX_TIM2_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:384:13: warning: 'MX_SPI1_Init' defined but not used [-Wunused-function]
+  384 | static void MX_SPI1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:350:13: warning: 'MX_I2S3_Init' defined but not used [-Wunused-function]
+  350 | static void MX_I2S3_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:316:13: warning: 'MX_I2C1_Init' defined but not used [-Wunused-function]
+  316 | static void MX_I2C1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:255:13: warning: 'MX_ADC1_Init' defined but not used [-Wunused-function]
+  255 | static void MX_ADC1_Init(void)
+      |             ^~~~~~~~~~~~
+../Core/Src/main.c:209:6: warning: 'SystemClock_Config' defined but not used [-Wunused-function]
+  209 | void SystemClock_Config(void)
+      |      ^~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:107:5: warning: 'main' defined but not used [-Wunused-function]
+  107 | int main(void)
+      |     ^~~~
+make: *** [Core/Src/subdir.mk:34: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+22:59:00 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44968	    252	  10292	  55512	   d8d8	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+23:02:35 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44912	    252	  10292	  55456	   d8a0	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+23:04:58 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:157:35: warning: passing argument 1 of 'CDC_Transmit_FS' from incompatible pointer type [-Wincompatible-pointer-types]
+  157 |                   CDC_Transmit_FS(adc_buf, ADC_BUF_LEN);
+      |                                   ^~~~~~~
+      |                                   |
+      |                                   uint16_t * {aka short unsigned int *}
+In file included from ../Core/Src/main.c:25:
+../USB_DEVICE/App/usbd_cdc_if.h:109:34: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
+  109 | uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+      |                         ~~~~~~~~~^~~
+../Core/Src/main.c:163:35: warning: passing argument 1 of 'CDC_Transmit_FS' from incompatible pointer type [-Wincompatible-pointer-types]
+  163 |                   CDC_Transmit_FS(&adc_buf[ADC_BUF_LEN/2], ADC_BUF_LEN);
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+      |                                   |
+      |                                   uint16_t * {aka short unsigned int *}
+../USB_DEVICE/App/usbd_cdc_if.h:109:34: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
+  109 | uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
+      |                         ~~~~~~~~~^~~
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44632	    252	  10292	  55176	   d788	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
+23:28:45 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-size  discovery_uart_demo.elf 
+   text	   data	    bss	    dec	    hex	filename
+  44632	    252	  10292	  55176	   d788	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+23:42:29 **** Incremental Build of configuration Debug for project discovery_uart_demo ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../USB_HOST/App -I../USB_HOST/Target -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "discovery_uart_demo.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\STM_Workspace_v4\discovery_uart_demo\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="discovery_uart_demo.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: discovery_uart_demo.elf
+ 
+arm-none-eabi-size  discovery_uart_demo.elf 
+arm-none-eabi-objdump -h -S discovery_uart_demo.elf  > "discovery_uart_demo.list"
+   text	   data	    bss	    dec	    hex	filename
+  44816	    252	  10292	  55360	   d840	discovery_uart_demo.elf
+Finished building: default.size.stdout
+ 
+Finished building: discovery_uart_demo.list
+ 
