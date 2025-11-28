@@ -261,7 +261,11 @@ class MainWindow(QMainWindow):
         self.trigger_mode = "AUTO"     # AUTO / NORMAL
         self.trigger_rising = True
         self.threshold_ch1 = 2048      # ADC counts
+        self.threshold_ch1 = 2048      # ADC counts
         self.threshold_ch2 = 2048      # ADC counts
+        self.use_trigger_filter = True # Enable moving average for trigger
+        self.trigger_avg_window = 5
+
         
         # Scaling
         self.volts_per_div = 1.0       # V/div
@@ -343,7 +347,16 @@ class MainWindow(QMainWindow):
         self.trig_select = QComboBox()
         self.trig_select.addItems(["AUTO", "NORMAL"])
         self.trig_select.currentIndexChanged.connect(self.update_trigger_mode)
+        self.trig_select.currentIndexChanged.connect(self.update_trigger_mode)
         controls.addWidget(self.trig_select)
+
+        # Trigger Filter Toggle
+        self.trig_filter_btn = QPushButton("Trigger Filter")
+        self.trig_filter_btn.setCheckable(True)
+        self.trig_filter_btn.setChecked(self.use_trigger_filter)
+        self.trig_filter_btn.clicked.connect(self.toggle_trigger_filter)
+        controls.addWidget(self.trig_filter_btn)
+
 
         # Trigger Level CH1
         controls.addWidget(QLabel("Trigger Level CH1"))
@@ -453,6 +466,10 @@ class MainWindow(QMainWindow):
 
     def update_trigger_mode(self):
         self.trigger_mode = self.trig_select.currentText()
+
+    def toggle_trigger_filter(self):
+        self.use_trigger_filter = self.trig_filter_btn.isChecked()
+
 
     def update_threshold_ch1(self):
         self.threshold_ch1 = self.th_slider_ch1.value()
@@ -658,8 +675,48 @@ class MainWindow(QMainWindow):
         samples_to_show = max(100, min(samples_to_show, len(raw_ch1)))  # clamp
 
         # Independent triggering for each channel
-        # Trigger on CH1 first (using RAW data with glitch rejection)
-        triggers_ch1 = find_triggers(raw_ch1, self.threshold_ch1, self.trigger_rising, max_found=1, min_width=3)
+        
+        # Prepare trigger source data
+        if self.use_trigger_filter:
+            # Use moving average for trigger detection
+            trig_src_ch1 = moving_average(raw_ch1, self.trigger_avg_window)
+            trig_src_ch2 = moving_average(raw_ch2, self.trigger_avg_window)
+            # Pad the start to match length (moving_average reduces length)
+            # The simple moving_average returns len - window + 1. 
+            # We need to be careful with indices. 
+            # Actually, let's just use the returned list and offset indices.
+            # But wait, moving_average implementation:
+            # ret[window_size:] = ...
+            # return list(ret[window_size - 1:] / window_size)
+            # Length is N - window_size + 1.
+            # So index i in trig_src corresponds to index i + window_size - 1 in raw data?
+            # Let's check the function:
+            # ret is cumsum. 
+            # ret[window_size:] - ret[:-window_size] gives sum of window.
+            # It corresponds to the window ending at that index.
+            # So index 0 in result is average of raw[0...window-1].
+            # Its "center" or "end" is at raw[window-1].
+            # Let's just use it as is, but we need to map the found index back to raw index.
+            # If find_triggers returns index `idx` in smoothed data, 
+            # that corresponds to `idx + window_size - 1` in raw data (end of window)
+            # or `idx` if we treat it as a phase shifted signal.
+            # For simplicity, let's just use the index directly but be aware of the shift.
+            # Ideally we want to align the phase, but for a simple trigger, 
+            # just finding a stable crossing is enough.
+            pass
+        else:
+            trig_src_ch1 = raw_ch1
+            trig_src_ch2 = raw_ch2
+
+        # Trigger on CH1 first
+        triggers_ch1 = find_triggers(trig_src_ch1, self.threshold_ch1, self.trigger_rising, max_found=1, min_width=3)
+        
+        # Adjust indices if filtered
+        if self.use_trigger_filter:
+            # Shift indices to match raw data roughly (align to end of window)
+            offset = self.trigger_avg_window - 1
+            triggers_ch1 = [t + offset for t in triggers_ch1]
+
         
         # Build CH1 data window according to trigger mode
         if self.trigger_mode == "AUTO":
@@ -684,8 +741,13 @@ class MainWindow(QMainWindow):
                 # In NORMAL mode, if no trigger, don't update
                 data_ch1 = []
 
-        # Now trigger on CH2 independently (using RAW data with glitch rejection)
-        triggers_ch2 = find_triggers(raw_ch2, self.threshold_ch2, self.trigger_rising, max_found=1, min_width=3)
+        # Now trigger on CH2 independently
+        triggers_ch2 = find_triggers(trig_src_ch2, self.threshold_ch2, self.trigger_rising, max_found=1, min_width=3)
+        
+        if self.use_trigger_filter:
+            offset = self.trigger_avg_window - 1
+            triggers_ch2 = [t + offset for t in triggers_ch2]
+
         
         # Build CH2 data window according to trigger mode
         if self.trigger_mode == "AUTO":
