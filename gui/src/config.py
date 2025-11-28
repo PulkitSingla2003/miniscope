@@ -5,7 +5,7 @@ VREF = 3.3
 NUM_CHANNELS = 2
 
 # UART frame: 128 samples per channel, interleaved, 2 bytes each = 512 bytes
-SAMPLES_PER_CHANNEL = 128
+SAMPLES_PER_CHANNEL = 256
 SAMPLES_PER_FRAME = SAMPLES_PER_CHANNEL * NUM_CHANNELS  # 256 total samples
 FRAME_BYTES = SAMPLES_PER_FRAME * 2  # 512 bytes
 BUFFER_SIZE = 8000  # larger buffer for each channel

@@ -15,8 +15,8 @@ class FakeSource:
         self.noise = 15
         self.vref = vref
         self.adc_max = ADC_MAX
-        self.freq1 = 80   # Hz sine for channel 1
-        self.freq2 = 120  # Hz sine for channel 2
+        self.freq1 = 800   # Hz sine for channel 1
+        self.freq2 = 1200  # Hz sine for channel 2
 
     def generate(self):
         """Generate new samples and update circular buffers for both channels."""

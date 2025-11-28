@@ -18,6 +18,15 @@ from .data_source import FakeSource
 from .serial_reader import SerialReader
 from .utils import moving_average, find_triggers
 
+# Audio output
+try:
+    import sounddevice as sd
+    AUDIO_AVAILABLE = True
+except Exception:
+    print("No audio")
+    AUDIO_AVAILABLE = False
+    sd = None
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -74,6 +83,11 @@ class MainWindow(QMainWindow):
         self.use_uart = False
         self.serial_reader = None
         self.serial_queue = queue.Queue(maxsize=8)
+        
+        # Audio output
+        self.audio_enabled = False
+        self.audio_volume = 0.5  # 0.0 to 1.0
+        self.audio_stream = None
 
         # ===== UI Styling =====
         self.setup_styles()
@@ -181,6 +195,30 @@ class MainWindow(QMainWindow):
         
         display_group.setLayout(display_layout)
         controls.addWidget(display_group)
+        
+        # ===== Audio Output Group =====
+        if AUDIO_AVAILABLE:
+            audio_group = QGroupBox("Audio Output")
+            audio_layout = QVBoxLayout()
+            audio_layout.setSpacing(3)
+            
+            self.audio_btn = QPushButton("Audio Off")
+            self.audio_btn.setCheckable(True)
+            self.audio_btn.setStyleSheet(self.button_style_active)
+            self.audio_btn.clicked.connect(self.toggle_audio)
+            audio_layout.addWidget(self.audio_btn)
+            
+            audio_layout.addWidget(QLabel("Volume"))
+            self.volume_slider = QSlider(Qt.Orientation.Horizontal)
+            self.volume_slider.setRange(0, 100)
+            self.volume_slider.setValue(50)
+            self.volume_slider.valueChanged.connect(self.update_volume)
+            audio_layout.addWidget(self.volume_slider)
+            self.volume_label = QLabel("50%")
+            audio_layout.addWidget(self.volume_label)
+            
+            audio_group.setLayout(audio_layout)
+            controls.addWidget(audio_group)
 
         # ===== Trigger Settings Group =====
         trigger_group = QGroupBox("Trigger")
@@ -386,6 +424,21 @@ class MainWindow(QMainWindow):
     def toggle_autoscale(self):
         self.auto_scale_enabled = self.autoscale_btn.isChecked()
         self.update_button_text(self.autoscale_btn, "Auto-Scale On", "Auto-Scale Off")
+    
+    def toggle_audio(self):
+        if not AUDIO_AVAILABLE:
+            return
+        self.audio_enabled = self.audio_btn.isChecked()
+        self.update_button_text(self.audio_btn, "Audio On", "Audio Off")
+        
+        if self.audio_enabled:
+            self.start_audio_stream()
+        else:
+            self.stop_audio_stream()
+    
+    def update_volume(self):
+        self.audio_volume = self.volume_slider.value() / 100.0
+        self.volume_label.setText(f"{self.volume_slider.value()}%")
 
     def update_trigger_mode(self):
         self.trigger_mode = self.trig_select.currentText()
@@ -512,6 +565,75 @@ class MainWindow(QMainWindow):
                     pass
                 self.serial_reader = None
             self.update_button_text(self.use_uart_btn, "Using UART", "Using Fake Data")
+    
+    # --------------------------------------------------------
+    # Audio Output
+    # --------------------------------------------------------
+    def start_audio_stream(self):
+        if not AUDIO_AVAILABLE or self.audio_stream is not None:
+            return
+        try:
+            # Use standard audio sample rate (CD quality)
+            self.audio_sample_rate = 44100
+            self.audio_stream = sd.OutputStream(
+                samplerate=self.audio_sample_rate,
+                channels=1,
+                callback=self.audio_callback,
+                blocksize=1024
+            )
+            self.audio_stream.start()
+            print(f"Audio started at {self.audio_sample_rate} Hz")
+        except Exception as e:
+            print(f"Failed to start audio: {e}")
+            self.audio_stream = None
+    
+    def stop_audio_stream(self):
+        if self.audio_stream is not None:
+            try:
+                self.audio_stream.stop()
+                self.audio_stream.close()
+            except Exception:
+                pass
+            self.audio_stream = None
+    
+    def audio_callback(self, outdata, frames, time_info, status):
+        """Audio callback to fill output buffer with waveform data"""
+        if not self.last_data_volts or 'ch1' not in self.last_data_volts:
+            outdata[:] = 0
+            return
+        
+        # Get CH1 data
+        volts = self.last_data_volts['ch1']
+        if len(volts) < 10:
+            outdata[:] = 0
+            return
+        
+        # Resample from FAKE_FS to 44100 Hz using interpolation
+        from scipy import interpolate
+        
+        # Calculate input samples needed
+        ratio = self.audio_sample_rate / FAKE_FS  # 44100 / 2880 = ~15.3
+        input_needed = int(frames / ratio) + 2
+        
+        # Get recent data
+        if len(volts) >= input_needed:
+            audio_data = volts[-input_needed:]
+        else:
+            # Repeat data if not enough
+            audio_data = (volts * ((input_needed // len(volts)) + 1))[:input_needed]
+        
+        # Interpolate to upsample
+        x_old = np.arange(len(audio_data))
+        x_new = np.linspace(0, len(audio_data) - 1, frames)
+        f = interpolate.interp1d(x_old, audio_data, kind='linear')
+        resampled = f(x_new)
+        
+        # Normalize to -1 to 1 (center around 1.65V)
+        normalized = (resampled - 1.65) / 1.65
+        normalized = normalized * self.audio_volume
+        normalized = np.clip(normalized, -1.0, 1.0)
+        
+        outdata[:] = normalized.reshape(-1, 1)
 
     # --------------------------------------------------------
     # Save
@@ -827,6 +949,9 @@ class MainWindow(QMainWindow):
         self.apply_cursor_visibility()
 
     def closeEvent(self, ev):
+        # Stop audio stream
+        self.stop_audio_stream()
+        
         # ensure serial thread stops
         if self.serial_reader:
             try:
