@@ -1,10 +1,10 @@
-19:57:58 **** Incremental Build of configuration Debug for project adc_with_gsm ****
+11:40:05 **** Build of configuration Debug for project adc_with_gsm ****
 make -j8 all 
 arm-none-eabi-size  adc_with_gsm.elf 
    text	   data	    bss	    dec	    hex	filename
-  46984	    156	   5460	  52600	   cd78	adc_with_gsm.elf
+  46996	    156	   5460	  52612	   cd84	adc_with_gsm.elf
 Finished building: default.size.stdout
  
 
-19:57:58 Build Finished. 0 errors, 0 warnings. (took 450ms)
+11:40:06 Build Finished. 0 errors, 0 warnings. (took 604ms)
 

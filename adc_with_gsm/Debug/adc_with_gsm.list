@@ -7,19 +7,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         0000b4f4  08000190  08000190  00001190  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       000000fc  0800b684  0800b684  0000c684  2**2
+  2 .rodata       00000108  0800b684  0800b684  0000c684  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM.extab    00000000  0800b780  0800b780  0000d09c  2**0
+  3 .ARM.extab    00000000  0800b78c  0800b78c  0000d09c  2**0
                   CONTENTS, READONLY
-  4 .ARM          00000008  0800b780  0800b780  0000c780  2**2
+  4 .ARM          00000008  0800b78c  0800b78c  0000c78c  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  5 .preinit_array 00000000  0800b788  0800b788  0000d09c  2**0
+  5 .preinit_array 00000000  0800b794  0800b794  0000d09c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  0800b788  0800b788  0000c788  2**2
+  6 .init_array   00000004  0800b794  0800b794  0000c794  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .fini_array   00000004  0800b78c  0800b78c  0000c78c  2**2
+  7 .fini_array   00000004  0800b798  0800b798  0000c798  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  8 .data         0000009c  20000000  0800b790  0000d000  2**2
+  8 .data         0000009c  20000000  0800b79c  0000d000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
   9 .ccmram       00000000  10000000  10000000  0000d09c  2**0
                   CONTENTS
@@ -29,25 +29,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  0000d09c  2**0
                   CONTENTS, READONLY
- 13 .debug_info   0001a816  00000000  00000000  0000d0cc  2**0
+ 13 .debug_info   0001a82d  00000000  00000000  0000d0cc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 0000416f  00000000  00000000  000278e2  2**0
+ 14 .debug_abbrev 000041a3  00000000  00000000  000278f9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00001558  00000000  00000000  0002ba58  2**3
+ 15 .debug_aranges 00001560  00000000  00000000  0002baa0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_rnglists 00001078  00000000  00000000  0002cfb0  2**0
+ 16 .debug_rnglists 0000107e  00000000  00000000  0002d000  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  00025386  00000000  00000000  0002e028  2**0
+ 17 .debug_macro  00025386  00000000  00000000  0002e07e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   0001d5f2  00000000  00000000  000533ae  2**0
+ 18 .debug_line   0001d60d  00000000  00000000  00053404  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000dad3d  00000000  00000000  000709a0  2**0
+ 19 .debug_str    000dad4a  00000000  00000000  00070a11  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  0014b6dd  2**0
+ 20 .comment      00000043  00000000  00000000  0014b75b  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00005f38  00000000  00000000  0014b720  2**2
+ 21 .debug_frame  00005f54  00000000  00000000  0014b7a0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 0000004f  00000000  00000000  00151658  2**0
+ 22 .debug_line_str 0000004f  00000000  00000000  001516f4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -505,6 +505,8 @@ void GSM_Init(void)
  8000628:	0800b6fc 	.word	0x0800b6fc
 
 0800062c <send_AT_command>:
+}
+
 
 // Function to send AT command via UART1
 void send_AT_command(char *command)
@@ -573,9 +575,9 @@ void send_AT_command(char *command)
  80006a4:	bd80      	pop	{r7, pc}
  80006a6:	bf00      	nop
  80006a8:	2000029c 	.word	0x2000029c
- 80006ac:	0800b70c 	.word	0x0800b70c
- 80006b0:	0800b710 	.word	0x0800b710
- 80006b4:	0800b720 	.word	0x0800b720
+ 80006ac:	0800b718 	.word	0x0800b718
+ 80006b0:	0800b71c 	.word	0x0800b71c
+ 80006b4:	0800b72c 	.word	0x0800b72c
 
 080006b8 <ring_buffer_put>:
 
@@ -1405,9 +1407,9 @@ static void MX_USART2_UART_Init(void)
  8000b58:	4b11      	ldr	r3, [pc, #68]	@ (8000ba0 <MX_USART2_UART_Init+0x4c>)
  8000b5a:	4a12      	ldr	r2, [pc, #72]	@ (8000ba4 <MX_USART2_UART_Init+0x50>)
  8000b5c:	601a      	str	r2, [r3, #0]
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 921600;
  8000b5e:	4b10      	ldr	r3, [pc, #64]	@ (8000ba0 <MX_USART2_UART_Init+0x4c>)
- 8000b60:	f44f 32e1 	mov.w	r2, #115200	@ 0x1c200
+ 8000b60:	f44f 2261 	mov.w	r2, #921600	@ 0xe1000
  8000b64:	605a      	str	r2, [r3, #4]
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
  8000b66:	4b0e      	ldr	r3, [pc, #56]	@ (8000ba0 <MX_USART2_UART_Init+0x4c>)
@@ -3155,7 +3157,7 @@ LoopFillZerobss:
   ldr r1, =_edata
  80014c0:	2000009c 	.word	0x2000009c
   ldr r2, =_sidata
- 80014c4:	0800b790 	.word	0x0800b790
+ 80014c4:	0800b79c 	.word	0x0800b79c
   ldr r2, =_sbss
  80014c8:	2000009c 	.word	0x2000009c
   ldr r4, =_ebss
@@ -5762,7 +5764,7 @@ static uint32_t DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma)
  80022dc:	4770      	bx	lr
  80022de:	bf00      	nop
  80022e0:	aaaaaaab 	.word	0xaaaaaaab
- 80022e4:	0800b744 	.word	0x0800b744
+ 80022e4:	0800b750 	.word	0x0800b750
 
 080022e8 <DMA_CheckFifoParam>:
   * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
@@ -14940,7 +14942,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef  *RCC_ClkInitStru
  8005bda:	bf00      	nop
  8005bdc:	40023c00 	.word	0x40023c00
  8005be0:	40023800 	.word	0x40023800
- 8005be4:	0800b72c 	.word	0x0800b72c
+ 8005be4:	0800b738 	.word	0x0800b738
  8005be8:	20000020 	.word	0x20000020
  8005bec:	20000024 	.word	0x20000024
 
@@ -15244,7 +15246,7 @@ uint32_t HAL_RCC_GetPCLK1Freq(void)
  8005e30:	4618      	mov	r0, r3
  8005e32:	bd80      	pop	{r7, pc}
  8005e34:	40023800 	.word	0x40023800
- 8005e38:	0800b73c 	.word	0x0800b73c
+ 8005e38:	0800b748 	.word	0x0800b748
 
 08005e3c <HAL_RCC_GetPCLK2Freq>:
   * @note   Each time PCLK2 changes, this function must be called to update the
@@ -15270,7 +15272,7 @@ uint32_t HAL_RCC_GetPCLK2Freq(void)
  8005e58:	4618      	mov	r0, r3
  8005e5a:	bd80      	pop	{r7, pc}
  8005e5c:	40023800 	.word	0x40023800
- 8005e60:	0800b73c 	.word	0x0800b73c
+ 8005e60:	0800b748 	.word	0x0800b748
 
 08005e64 <HAL_RCCEx_PeriphCLKConfig>:
   *        domain (RTC and RCC_BDCR register expect BKPSRAM) will be reset
@@ -29146,10 +29148,10 @@ void MX_DriverVbusFS(uint8_t state)
  800af3a:	4798      	blx	r3
  800af3c:	3601      	adds	r6, #1
  800af3e:	e7f2      	b.n	800af26 <__libc_init_array+0x1e>
- 800af40:	0800b788 	.word	0x0800b788
- 800af44:	0800b788 	.word	0x0800b788
- 800af48:	0800b788 	.word	0x0800b788
- 800af4c:	0800b78c 	.word	0x0800b78c
+ 800af40:	0800b794 	.word	0x0800b794
+ 800af44:	0800b794 	.word	0x0800b794
+ 800af48:	0800b794 	.word	0x0800b794
+ 800af4c:	0800b798 	.word	0x0800b798
 
 0800af50 <__retarget_lock_acquire_recursive>:
  800af50:	4770      	bx	lr
@@ -29503,11 +29505,11 @@ void MX_DriverVbusFS(uint8_t state)
  800b27c:	4638      	mov	r0, r7
  800b27e:	f000 f879 	bl	800b374 <_printf_i>
  800b282:	e7ed      	b.n	800b260 <_svfiprintf_r+0x1c0>
- 800b284:	0800b74c 	.word	0x0800b74c
- 800b288:	0800b756 	.word	0x0800b756
+ 800b284:	0800b758 	.word	0x0800b758
+ 800b288:	0800b762 	.word	0x0800b762
  800b28c:	00000000 	.word	0x00000000
  800b290:	0800afe9 	.word	0x0800afe9
- 800b294:	0800b752 	.word	0x0800b752
+ 800b294:	0800b75e 	.word	0x0800b75e
 
 0800b298 <_printf_common>:
  800b298:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -29836,8 +29838,8 @@ void MX_DriverVbusFS(uint8_t state)
  800b5a0:	2500      	movs	r5, #0
  800b5a2:	f104 0619 	add.w	r6, r4, #25
  800b5a6:	e7f5      	b.n	800b594 <_printf_i+0x220>
- 800b5a8:	0800b75d 	.word	0x0800b75d
- 800b5ac:	0800b76e 	.word	0x0800b76e
+ 800b5a8:	0800b769 	.word	0x0800b769
+ 800b5ac:	0800b77a 	.word	0x0800b77a
 
 0800b5b0 <memmove>:
  800b5b0:	4288      	cmp	r0, r1
