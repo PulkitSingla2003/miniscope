@@ -52,10 +52,13 @@ class MainWindow(QMainWindow):
         self.ch2_offset = 0.0
         
         # Smart Auto-Scaling State
+        self.auto_scale_enabled = True     # Toggle for autoscaling
         self.y_min = 0.0
         self.y_max = 3.3
+        self.x_min = 0.0
+        self.x_max = 100.0
         self.last_expansion_time = time.time()
-        self.auto_scale_timeout = 10.0  # seconds to wait before contracting
+        self.auto_scale_timeout = 5.0  # seconds to wait before contracting
 
         # Channel enables
         self.ch1_enabled = True
@@ -146,6 +149,13 @@ class MainWindow(QMainWindow):
         self.fft_btn.setStyleSheet(self.button_style_active)
         self.fft_btn.clicked.connect(self.toggle_fft)
         display_layout.addWidget(self.fft_btn)
+        
+        self.autoscale_btn = QPushButton("Auto-Scale On")
+        self.autoscale_btn.setCheckable(True)
+        self.autoscale_btn.setChecked(True)
+        self.autoscale_btn.setStyleSheet(self.button_style_active)
+        self.autoscale_btn.clicked.connect(self.toggle_autoscale)
+        display_layout.addWidget(self.autoscale_btn)
         
         self.cursor_enable_btn = QPushButton("Enable Cursors")
         self.cursor_enable_btn.setCheckable(True)
@@ -313,10 +323,10 @@ class MainWindow(QMainWindow):
     # --------------------------------------------------------
     def setup_styles(self):
         """Setup custom styles for better UX"""
-        # Purple theme for general buttons
+        # Blue theme for general buttons
         self.button_style_active = """
             QPushButton:checked {
-                background-color: #9C27B0;
+                background-color: #2196F3;
                 color: white;
                 font-weight: bold;
             }
@@ -372,6 +382,10 @@ class MainWindow(QMainWindow):
         self.update_button_text(self.fft_btn, "FFT On", "FFT")
         # Hide cursors in FFT mode (indices/units differ)
         self.apply_cursor_visibility()
+
+    def toggle_autoscale(self):
+        self.auto_scale_enabled = self.autoscale_btn.isChecked()
+        self.update_button_text(self.autoscale_btn, "Auto-Scale On", "Auto-Scale Off")
 
     def update_trigger_mode(self):
         self.trigger_mode = self.trig_select.currentText()
@@ -487,7 +501,7 @@ class MainWindow(QMainWindow):
             self.serial_reader.start()
             # small delay to allow thread to try open
             time.sleep(0.05)
-            self.update_button_text(self.use_uart_btn, "Using UART", "Use Fake Data")
+            self.update_button_text(self.use_uart_btn, "Using UART", "Using Fake Data")
         else:
             # stop reader
             if self.serial_reader:
@@ -497,7 +511,7 @@ class MainWindow(QMainWindow):
                 except Exception:
                     pass
                 self.serial_reader = None
-            self.update_button_text(self.use_uart_btn, "Using UART", "Use Fake Data")
+            self.update_button_text(self.use_uart_btn, "Using UART", "Using Fake Data")
 
     # --------------------------------------------------------
     # Save
@@ -721,43 +735,57 @@ class MainWindow(QMainWindow):
             self.plot.setLabel("bottom", "Samples")
             self.plot.setLabel("left", "Volts")
             
-            # --- Smart Auto-Scaling ---
-            # 1. Find min/max of current data
-            all_data = volts_ch1 + volts_ch2
-            if all_data:
-                curr_min = min(all_data)
-                curr_max = max(all_data)
+            if self.auto_scale_enabled:
+                # --- Smart Auto-Scaling (Horizontal + Vertical) ---
+                # 1. Find min/max of current data
+                all_data = volts_ch1 + volts_ch2
+                N = max(len(volts_ch1), len(volts_ch2))
                 
-                # Add some margin
-                margin = (curr_max - curr_min) * 0.1 if (curr_max - curr_min) > 0 else 0.1
-                target_min = curr_min - margin
-                target_max = curr_max + margin
-                
-                now = time.time()
-                
-                # Check for expansion
-                expanded = False
-                if target_min < self.y_min:
-                    self.y_min = target_min
-                    expanded = True
-                if target_max > self.y_max:
-                    self.y_max = target_max
-                    expanded = True
-                
-                if expanded:
-                    self.last_expansion_time = now
-                else:
-                    # Check for contraction (only if we haven't expanded recently)
-                    if (now - self.last_expansion_time) > self.auto_scale_timeout:
-                        # Contract slowly or jump? "Contract after delay" usually means we can now fit to the smaller signal
-                        # We'll just set it to the target
-                        self.y_min = target_min
-                        self.y_max = target_max
-                        self.last_expansion_time = now # Reset timer so we don't jitter if it's borderline
+                if all_data:
+                    curr_min = min(all_data)
+                    curr_max = max(all_data)
+                    
+                    # Add some margin for Y axis
+                    margin = (curr_max - curr_min) * 0.1 if (curr_max - curr_min) > 0 else 0.1
+                    target_y_min = curr_min - margin
+                    target_y_max = curr_max + margin
+                    
+                    # X axis: immediate scaling with offset padding
+                    padding = int(N * 0.02)  # 5% padding on each side
+                    target_x_min = -padding
+                    target_x_max = N + padding
+                    
+                    # Apply X-axis immediately (no delay)
+                    self.x_min = target_x_min
+                    self.x_max = target_x_max
+                    
+                    now = time.time()
+                    
+                    # Y-axis: delayed expansion/contraction
+                    expanded = False
+                    if target_y_min < self.y_min:
+                        self.y_min = target_y_min
+                        expanded = True
+                    if target_y_max > self.y_max:
+                        self.y_max = target_y_max
+                        expanded = True
+                    
+                    if expanded:
+                        self.last_expansion_time = now
+                    else:
+                        # Check for contraction (only if we haven't expanded recently)
+                        if (now - self.last_expansion_time) > self.auto_scale_timeout:
+                            self.y_min = target_y_min
+                            self.y_max = target_y_max
+                            self.last_expansion_time = now
 
-            # Disable auto-range and set manual range
-            self.plot.disableAutoRange(axis=pg.ViewBox.YAxis)
-            self.plot.setYRange(self.y_min, self.y_max, padding=0)
+                # Apply auto-scaled ranges
+                self.plot.disableAutoRange()
+                self.plot.setXRange(self.x_min, self.x_max, padding=0)
+                self.plot.setYRange(self.y_min, self.y_max, padding=0)
+            else:
+                # Auto-scale disabled - keep current ranges
+                self.plot.disableAutoRange()
             
             # Update both channel curves
             if self.ch1_enabled:
