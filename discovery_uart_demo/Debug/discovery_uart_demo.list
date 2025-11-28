@@ -23,9 +23,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   9 .ccmram       00000000  10000000  10000000  0000c0fc  2**0
                   CONTENTS
- 10 .bss          00002234  200000fc  200000fc  0000c0fc  2**2
+ 10 .bss          00003e34  200000fc  200000fc  0000c0fc  2**2
                   ALLOC
- 11 ._user_heap_stack 00000600  20002330  20002330  0000c0fc  2**0
+ 11 ._user_heap_stack 00000600  20003f30  20003f30  0000c0fc  2**0
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  0000c0fc  2**0
                   CONTENTS, READONLY
@@ -41,13 +41,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_line   00023724  00000000  00000000  00058f8e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000e22df  00000000  00000000  0007c6b2  2**0
+ 19 .debug_str    000e22e0  00000000  00000000  0007c6b2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  0015e991  2**0
+ 20 .comment      00000043  00000000  00000000  0015e992  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00007408  00000000  00000000  0015e9d4  2**2
+ 21 .debug_frame  00007408  00000000  00000000  0015e9d8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000056  00000000  00000000  00165ddc  2**0
+ 22 .debug_line_str 00000056  00000000  00000000  00165de0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -395,7 +395,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc)
  800050a:	3708      	adds	r7, #8
  800050c:	46bd      	mov	sp, r7
  800050e:	bd80      	pop	{r7, pc}
- 8000510:	20000745 	.word	0x20000745
+ 8000510:	20002345 	.word	0x20002345
  8000514:	200002b4 	.word	0x200002b4
 
 08000518 <HAL_ADC_ConvCpltCallback>:
@@ -419,7 +419,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
  800052e:	3708      	adds	r7, #8
  8000530:	46bd      	mov	sp, r7
  8000532:	bd80      	pop	{r7, pc}
- 8000534:	20000744 	.word	0x20000744
+ 8000534:	20002344 	.word	0x20002344
  8000538:	200002b4 	.word	0x200002b4
 
 0800053c <resume_sampling>:
@@ -448,8 +448,8 @@ static void resume_sampling(void)
  8000552:	bf00      	nop
  8000554:	bd80      	pop	{r7, pc}
  8000556:	bf00      	nop
- 8000558:	20000745 	.word	0x20000745
- 800055c:	20000744 	.word	0x20000744
+ 8000558:	20002345 	.word	0x20002345
+ 800055c:	20002344 	.word	0x20002344
  8000560:	200002b4 	.word	0x200002b4
 
 08000564 <transmit_snapshot>:
@@ -540,7 +540,7 @@ int main(void)
 //  uint8_t msg[] = "Hello World!\r\n";
 
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buf, ADC_BUF_LEN);
- 80005c8:	f44f 7200 	mov.w	r2, #512	@ 0x200
+ 80005c8:	f44f 5280 	mov.w	r2, #4096	@ 0x1000
  80005cc:	4912      	ldr	r1, [pc, #72]	@ (8000618 <main+0x80>)
  80005ce:	4813      	ldr	r0, [pc, #76]	@ (800061c <main+0x84>)
  80005d0:	f000 feda 	bl	8001388 <HAL_ADC_Start_DMA>
@@ -565,7 +565,7 @@ int main(void)
  80005e8:	701a      	strb	r2, [r3, #0]
 
 	          transmit_snapshot(adc_buf, ADC_BUF_LEN / 2);
- 80005ea:	f44f 7180 	mov.w	r1, #256	@ 0x100
+ 80005ea:	f44f 6100 	mov.w	r1, #2048	@ 0x800
  80005ee:	480a      	ldr	r0, [pc, #40]	@ (8000618 <main+0x80>)
  80005f0:	f7ff ffb8 	bl	8000564 <transmit_snapshot>
 	          resume_sampling();
@@ -584,7 +584,7 @@ int main(void)
  8000606:	701a      	strb	r2, [r3, #0]
 
 	          transmit_snapshot(&adc_buf[ADC_BUF_LEN/2], ADC_BUF_LEN / 2);
- 8000608:	f44f 7180 	mov.w	r1, #256	@ 0x100
+ 8000608:	f44f 6100 	mov.w	r1, #2048	@ 0x800
  800060c:	4807      	ldr	r0, [pc, #28]	@ (800062c <main+0x94>)
  800060e:	f7ff ffa9 	bl	8000564 <transmit_snapshot>
 	          resume_sampling();
@@ -594,9 +594,9 @@ int main(void)
  8000618:	20000344 	.word	0x20000344
  800061c:	20000118 	.word	0x20000118
  8000620:	200002b4 	.word	0x200002b4
- 8000624:	20000745 	.word	0x20000745
- 8000628:	20000744 	.word	0x20000744
- 800062c:	20000544 	.word	0x20000544
+ 8000624:	20002345 	.word	0x20002345
+ 8000628:	20002344 	.word	0x20002344
+ 800062c:	20001344 	.word	0x20001344
 
 08000630 <SystemClock_Config>:
 /**
@@ -761,9 +761,9 @@ static void MX_ADC1_Init(void)
  8000716:	4b29      	ldr	r3, [pc, #164]	@ (80007bc <MX_ADC1_Init+0xb8>)
  8000718:	4a29      	ldr	r2, [pc, #164]	@ (80007c0 <MX_ADC1_Init+0xbc>)
  800071a:	601a      	str	r2, [r3, #0]
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
  800071c:	4b27      	ldr	r3, [pc, #156]	@ (80007bc <MX_ADC1_Init+0xb8>)
- 800071e:	f44f 3240 	mov.w	r2, #196608	@ 0x30000
+ 800071e:	f44f 3280 	mov.w	r2, #65536	@ 0x10000
  8000722:	605a      	str	r2, [r3, #4]
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
  8000724:	4b25      	ldr	r3, [pc, #148]	@ (80007bc <MX_ADC1_Init+0xb8>)
@@ -1140,9 +1140,9 @@ static void MX_TIM2_Init(void)
  8000916:	4b1a      	ldr	r3, [pc, #104]	@ (8000980 <MX_TIM2_Init+0x94>)
  8000918:	2200      	movs	r2, #0
  800091a:	609a      	str	r2, [r3, #8]
-  htim2.Init.Period = 1679;
+  htim2.Init.Period = 1343;
  800091c:	4b18      	ldr	r3, [pc, #96]	@ (8000980 <MX_TIM2_Init+0x94>)
- 800091e:	f240 628f 	movw	r2, #1679	@ 0x68f
+ 800091e:	f240 523f 	movw	r2, #1343	@ 0x53f
  8000922:	60da      	str	r2, [r3, #12]
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
  8000924:	4b16      	ldr	r3, [pc, #88]	@ (8000980 <MX_TIM2_Init+0x94>)
@@ -2667,7 +2667,7 @@ void OTG_FS_IRQHandler(void)
  8001152:	bf00      	nop
  8001154:	bd80      	pop	{r7, pc}
  8001156:	bf00      	nop
- 8001158:	20001c2c 	.word	0x20001c2c
+ 8001158:	2000382c 	.word	0x2000382c
 
 0800115c <SystemInit>:
   *         configuration.
@@ -2789,7 +2789,7 @@ LoopFillZerobss:
   ldr r2, =_sbss
  80011c8:	200000fc 	.word	0x200000fc
   ldr r4, =_ebss
- 80011cc:	20002330 	.word	0x20002330
+ 80011cc:	20003f30 	.word	0x20003f30
 
 080011d0 <ADC_IRQHandler>:
  * @retval None       
@@ -2952,7 +2952,7 @@ __weak void HAL_IncTick(void)
  8001294:	4770      	bx	lr
  8001296:	bf00      	nop
  8001298:	20000008 	.word	0x20000008
- 800129c:	20000748 	.word	0x20000748
+ 800129c:	20002348 	.word	0x20002348
 
 080012a0 <HAL_GetTick>:
   * @note This function is declared as __weak to be overwritten in case of other 
@@ -2972,7 +2972,7 @@ __weak uint32_t HAL_GetTick(void)
  80012ac:	f85d 7b04 	ldr.w	r7, [sp], #4
  80012b0:	4770      	bx	lr
  80012b2:	bf00      	nop
- 80012b4:	20000748 	.word	0x20000748
+ 80012b4:	20002348 	.word	0x20002348
 
 080012b8 <HAL_Delay>:
   *       implementations in user file.
@@ -26996,7 +26996,7 @@ static USBD_StatusTypeDef USBD_SetConfig(USBD_HandleTypeDef *pdev, USBD_SetupReq
  8009fe6:	46bd      	mov	sp, r7
  8009fe8:	bd80      	pop	{r7, pc}
  8009fea:	bf00      	nop
- 8009fec:	2000074c 	.word	0x2000074c
+ 8009fec:	2000234c 	.word	0x2000234c
 
 08009ff0 <USBD_GetConfig>:
   * @param  pdev: device instance
@@ -27835,7 +27835,7 @@ void MX_USB_DEVICE_Init(void)
  800a424:	bf00      	nop
  800a426:	bd80      	pop	{r7, pc}
  800a428:	200000ac 	.word	0x200000ac
- 800a42c:	20000750 	.word	0x20000750
+ 800a42c:	20002350 	.word	0x20002350
  800a430:	20000018 	.word	0x20000018
  800a434:	20000098 	.word	0x20000098
 
@@ -27865,9 +27865,9 @@ static int8_t CDC_Init_FS(void)
 }
  800a450:	4618      	mov	r0, r3
  800a452:	bd80      	pop	{r7, pc}
- 800a454:	2000122c 	.word	0x2000122c
- 800a458:	20000750 	.word	0x20000750
- 800a45c:	20000a2c 	.word	0x20000a2c
+ 800a454:	20002e2c 	.word	0x20002e2c
+ 800a458:	20002350 	.word	0x20002350
+ 800a45c:	2000262c 	.word	0x2000262c
 
 0800a460 <CDC_DeInit_FS>:
 /**
@@ -27994,7 +27994,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
  800a54a:	46bd      	mov	sp, r7
  800a54c:	bd80      	pop	{r7, pc}
  800a54e:	bf00      	nop
- 800a550:	20000750 	.word	0x20000750
+ 800a550:	20002350 	.word	0x20002350
 
 0800a554 <CDC_Transmit_FS>:
   * @param  Buf: Buffer of data to be sent
@@ -28050,7 +28050,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
  800a596:	46bd      	mov	sp, r7
  800a598:	bd80      	pop	{r7, pc}
  800a59a:	bf00      	nop
- 800a59c:	20000750 	.word	0x20000750
+ 800a59c:	20002350 	.word	0x20002350
 
 0800a5a0 <CDC_TransmitCplt_FS>:
   * @param  Buf: Buffer of data to be received
@@ -28181,7 +28181,7 @@ uint8_t * USBD_FS_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length
  800a63a:	46bd      	mov	sp, r7
  800a63c:	bd80      	pop	{r7, pc}
  800a63e:	bf00      	nop
- 800a640:	20001a2c 	.word	0x20001a2c
+ 800a640:	2000362c 	.word	0x2000362c
  800a644:	0800ae98 	.word	0x0800ae98
 
 0800a648 <USBD_FS_ManufacturerStrDescriptor>:
@@ -28210,7 +28210,7 @@ uint8_t * USBD_FS_ManufacturerStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *l
  800a662:	3708      	adds	r7, #8
  800a664:	46bd      	mov	sp, r7
  800a666:	bd80      	pop	{r7, pc}
- 800a668:	20001a2c 	.word	0x20001a2c
+ 800a668:	2000362c 	.word	0x2000362c
  800a66c:	0800aeb0 	.word	0x0800aeb0
 
 0800a670 <USBD_FS_SerialStrDescriptor>:
@@ -28289,7 +28289,7 @@ uint8_t * USBD_FS_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
  800a6c2:	46bd      	mov	sp, r7
  800a6c4:	bd80      	pop	{r7, pc}
  800a6c6:	bf00      	nop
- 800a6c8:	20001a2c 	.word	0x20001a2c
+ 800a6c8:	2000362c 	.word	0x2000362c
  800a6cc:	0800aec4 	.word	0x0800aec4
 
 0800a6d0 <USBD_FS_InterfaceStrDescriptor>:
@@ -28333,7 +28333,7 @@ uint8_t * USBD_FS_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *leng
  800a6fe:	46bd      	mov	sp, r7
  800a700:	bd80      	pop	{r7, pc}
  800a702:	bf00      	nop
- 800a704:	20001a2c 	.word	0x20001a2c
+ 800a704:	2000362c 	.word	0x2000362c
  800a708:	0800aed0 	.word	0x0800aed0
 
 0800a70c <Get_SerialNum>:
@@ -29066,7 +29066,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev)
  800ab1a:	3708      	adds	r7, #8
  800ab1c:	46bd      	mov	sp, r7
  800ab1e:	bd80      	pop	{r7, pc}
- 800ab20:	20001c2c 	.word	0x20001c2c
+ 800ab20:	2000382c 	.word	0x2000382c
 
 0800ab24 <USBD_LL_Start>:
   * @brief  Starts the low level portion of the device driver.
@@ -29540,7 +29540,7 @@ void *USBD_static_malloc(uint32_t size)
  800adb0:	f85d 7b04 	ldr.w	r7, [sp], #4
  800adb4:	4770      	bx	lr
  800adb6:	bf00      	nop
- 800adb8:	20002110 	.word	0x20002110
+ 800adb8:	20003d10 	.word	0x20003d10
 
 0800adbc <USBD_static_free>:
   * @brief  Dummy memory free
