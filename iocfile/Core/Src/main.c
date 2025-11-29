@@ -93,6 +93,64 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void ADC1_BareMetal_Init(uint16_t *buffer, uint32_t length)
+{
+	/* Enable clocks for GPIOA (analog pins), DMA2 and ADC1 */
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_DMA2EN;
+	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+
+	/* Configure PA1/PA3 as analog inputs with no pulls */
+	GPIOA->MODER &= ~(GPIO_MODER_MODER1 | GPIO_MODER_MODER3);
+	GPIOA->MODER |= GPIO_MODER_MODER1 | GPIO_MODER_MODER3;
+	GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPDR1 | GPIO_PUPDR_PUPDR3);
+
+	/* ADC common prescaler: PCLK2/4 (matches HAL config) */
+	ADC->CCR = (ADC->CCR & ~ADC_CCR_ADCPRE) | ADC_CCR_ADCPRE_0;
+
+	/* Regular sequence: two channels, scan mode, triggered by TIM2 TRGO on rising edge */
+	ADC1->CR1 = ADC_CR1_SCAN;
+	ADC1->CR2 = ADC_CR2_DMA | ADC_CR2_DDS | ADC_CR2_EXTEN_0 | (ADC_CR2_EXTSEL_2 | ADC_CR2_EXTSEL_1);
+	ADC1->CR2 &= ~ADC_CR2_CONT;
+
+	/* 3-cycle sampling on channels 1 and 3 */
+	ADC1->SMPR2 &= ~((7U << (1U * 3U)) | (7U << (3U * 3U)));
+
+	/* Sequence length = 2 conversions, rank1: ch1, rank2: ch3 */
+	ADC1->SQR1 = ((2U - 1U) << 20);
+	ADC1->SQR3 = (1U << 0) | (3U << 5);
+
+	/* Power up ADC */
+	ADC1->CR2 |= ADC_CR2_ADON;
+
+	/* Pre-configure DMA stream (disabled) */
+	DMA2_Stream0->CR &= ~DMA_SxCR_EN;
+	while (DMA2_Stream0->CR & DMA_SxCR_EN)
+	{
+	}
+	DMA2->LIFCR = DMA_LIFCR_CTCIF0 | DMA_LIFCR_CHTIF0 | DMA_LIFCR_CTEIF0 |
+				  DMA_LIFCR_CDMEIF0 | DMA_LIFCR_CFEIF0;
+	DMA2_Stream0->PAR = (uint32_t)&ADC1->DR;
+	DMA2_Stream0->M0AR = (uint32_t)buffer;
+	DMA2_Stream0->NDTR = length;
+	DMA2_Stream0->CR = DMA_SxCR_MINC | DMA_SxCR_CIRC | DMA_SxCR_PL_1 |
+					   DMA_SxCR_MSIZE_0 | DMA_SxCR_PSIZE_0 |
+					   DMA_SxCR_TCIE | DMA_SxCR_HTIE;
+	DMA2_Stream0->FCR = 0;
+}
+
+static void ADC1_BareMetal_Start(uint16_t *buffer, uint32_t length)
+{
+	DMA2_Stream0->CR &= ~DMA_SxCR_EN;
+	while (DMA2_Stream0->CR & DMA_SxCR_EN)
+	{
+	}
+	DMA2->LIFCR = DMA_LIFCR_CTCIF0 | DMA_LIFCR_CHTIF0 | DMA_LIFCR_CTEIF0 |
+				  DMA_LIFCR_CDMEIF0 | DMA_LIFCR_CFEIF0;
+	DMA2_Stream0->M0AR = (uint32_t)buffer;
+	DMA2_Stream0->NDTR = length;
+	DMA2_Stream0->CR |= DMA_SxCR_EN;
+}
+
 static void resume_sampling(void)
 {
 	/* Clear any stale flags before we start filling again */
@@ -155,7 +213,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 //  uint8_t msg[] = "Hello World!\r\n";
 
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buf, ADC_BUF_LEN);
+	ADC1_BareMetal_Start(adc_buf, ADC_BUF_LEN);
 	HAL_TIM_Base_Start(&htim2);
   /* USER CODE END 2 */
 
@@ -246,55 +304,8 @@ static void MX_ADC1_Init(void)
 {
 
   /* USER CODE BEGIN ADC1_Init 0 */
-
+  ADC1_BareMetal_Init(adc_buf, ADC_BUF_LEN);
   /* USER CODE END ADC1_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC1_Init 1 */
-
-  /* USER CODE END ADC1_Init 1 */
-
-  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
-  */
-  hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
-  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc1.Init.ScanConvMode = ENABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
-  hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T2_TRGO;
-  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 2;
-  hadc1.Init.DMAContinuousRequests = ENABLE;
-  hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  if (HAL_ADC_Init(&hadc1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-  */
-  sConfig.Channel = ADC_CHANNEL_1;
-  sConfig.Rank = 1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
-  */
-  sConfig.Channel = ADC_CHANNEL_3;
-  sConfig.Rank = 2;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC1_Init 2 */
-
-  /* USER CODE END ADC1_Init 2 */
 
 }
 

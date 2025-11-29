@@ -56,9 +56,9 @@
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
-extern DMA_HandleTypeDef hdma_adc1;
 extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart2;
+extern ADC_HandleTypeDef hadc1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -235,12 +235,26 @@ void USART2_IRQHandler(void)
 void DMA2_Stream0_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+	uint32_t lisr = DMA2->LISR;
+
+	if (lisr & DMA_LISR_HTIF0)
+	{
+		DMA2->LIFCR = DMA_LIFCR_CHTIF0;
+		HAL_ADC_ConvHalfCpltCallback(&hadc1);
+	}
+
+	if (lisr & DMA_LISR_TCIF0)
+	{
+		DMA2->LIFCR = DMA_LIFCR_CTCIF0;
+		HAL_ADC_ConvCpltCallback(&hadc1);
+	}
+
+	if (lisr & (DMA_LISR_TEIF0 | DMA_LISR_DMEIF0 | DMA_LISR_FEIF0))
+	{
+		DMA2->LIFCR = DMA_LIFCR_CTEIF0 | DMA_LIFCR_CDMEIF0 | DMA_LIFCR_CFEIF0;
+	}
 
   /* USER CODE END DMA2_Stream0_IRQn 0 */
-  HAL_DMA_IRQHandler(&hdma_adc1);
-  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
-
-  /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
 /**

@@ -6,3 +6,7 @@ gui/notes.txt
 *.DS_Store
 *.metadata
 .metadata/
+# IDE garbage
+.metadata/
+.DS_Store
+
