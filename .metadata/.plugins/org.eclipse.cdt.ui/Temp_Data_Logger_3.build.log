@@ -1,4 +1,4 @@
-19:37:34 **** Incremental Build of configuration Debug for project Temp_Data_Logger_3 ****
+22:57:06 **** Incremental Build of configuration Debug for project Temp_Data_Logger_3 ****
 make -j8 all 
 arm-none-eabi-size  Temp_Data_Logger_3.elf 
    text	   data	    bss	    dec	    hex	filename
@@ -6,5 +6,5 @@ arm-none-eabi-size  Temp_Data_Logger_3.elf
 Finished building: default.size.stdout
  
 
-19:37:34 Build Finished. 0 errors, 0 warnings. (took 249ms)
+22:57:06 Build Finished. 0 errors, 0 warnings. (took 444ms)
 

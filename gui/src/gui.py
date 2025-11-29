@@ -13,7 +13,7 @@ import pyqtgraph as pg
 import serial.tools.list_ports
 import numpy as np
 
-from .config import FAKE_FS, ADC_MAX, VREF, BUFFER_SIZE, FRAME_BYTES
+from .config import FAKE_FS, ADC_MAX, VREF, BUFFER_SIZE, FRAME_BYTES, VOLTAGE_MULT_CH1, VOLTAGE_MULT_CH2
 from .data_source import FakeSource
 from .serial_reader import SerialReader
 from .utils import moving_average, find_triggers
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Mini Scope (UART)")
+        self.setWindowTitle("Mini Scope (USB)")
 
         # ---- data / state ----
         self.src_fake = FakeSource()
@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
         self.voltage_mult_ch2 = 1.0        # voltage multiplier
         self.ch1_offset = 0.0              # vertical offset in volts
         self.ch2_offset = 0.0
+
         
         # Smart Auto-Scaling State
         self.auto_scale_enabled = True     # Toggle for autoscaling
@@ -124,8 +125,8 @@ class MainWindow(QMainWindow):
         self.plot.addItem(self.cursor2)
         self.cursor1.setVisible(False)
         self.cursor2.setVisible(False)
-        self.cursor1.setValue(10)
-        self.cursor2.setValue(100)
+        self.cursor1.setValue(0.001)
+        self.cursor2.setValue(0.002)
         self.cursor1.sigPositionChanged.connect(self.update_cursors)
         self.cursor2.sigPositionChanged.connect(self.update_cursors)
 
@@ -146,6 +147,31 @@ class MainWindow(QMainWindow):
         
         scroll_area.setWidget(controls_widget)
         hbox.addWidget(scroll_area, stretch=1)
+
+        # ===== Data Source Group =====
+        uart_group = QGroupBox("Data Source")
+        uart_layout = QVBoxLayout()
+        uart_layout.setSpacing(3)
+        
+        self.use_uart_btn = QPushButton("Using Fake Data")
+        self.use_uart_btn.setCheckable(True)
+        self.use_uart_btn.setStyleSheet(self.button_style_active)
+        self.use_uart_btn.clicked.connect(self.toggle_uart)
+        uart_layout.addWidget(self.use_uart_btn)
+        
+        uart_layout.addWidget(QLabel("COM Port"))
+        self.com_select = QComboBox()
+        self.update_com_ports()
+        uart_layout.addWidget(self.com_select)
+        
+        # uart_layout.addWidget(QLabel("Baud Rate"))
+        # self.baud_select = QComboBox()
+        # self.baud_select.addItems(["9600", "57600", "115200", "230400", "460800", "921600"])
+        # self.baud_select.setCurrentText("115200")
+        # uart_layout.addWidget(self.baud_select)
+        
+        uart_group.setLayout(uart_layout)
+        controls.addWidget(uart_group)
 
         # ===== Display Controls Group =====
         display_group = QGroupBox("Display")
@@ -311,30 +337,27 @@ class MainWindow(QMainWindow):
         ch2_group.setLayout(ch2_layout)
         controls.addWidget(ch2_group)
 
-        # ===== Data Source Group =====
-        uart_group = QGroupBox("Data Source")
-        uart_layout = QVBoxLayout()
-        uart_layout.setSpacing(3)
+        # ===== Measurements Group =====
+        meas_group = QGroupBox("Measurements")
+        meas_layout = QVBoxLayout()
+        meas_layout.setSpacing(5)
         
-        self.use_uart_btn = QPushButton("Using Fake Data")
-        self.use_uart_btn.setCheckable(True)
-        self.use_uart_btn.setStyleSheet(self.button_style_active)
-        self.use_uart_btn.clicked.connect(self.toggle_uart)
-        uart_layout.addWidget(self.use_uart_btn)
+        # CH1 Measurements
+        meas_layout.addWidget(QLabel("<b>Channel 1</b>"))
+        self.meas_label_ch1 = QLabel("Freq: --\nVpp: --\nVavg: --")
+        self.meas_label_ch1.setStyleSheet("color: #4CAF50;")
+        meas_layout.addWidget(self.meas_label_ch1)
         
-        uart_layout.addWidget(QLabel("COM Port"))
-        self.com_select = QComboBox()
-        self.update_com_ports()
-        uart_layout.addWidget(self.com_select)
+        # CH2 Measurements
+        meas_layout.addWidget(QLabel("<b>Channel 2</b>"))
+        self.meas_label_ch2 = QLabel("Freq: --\nVpp: --\nVavg: --")
+        self.meas_label_ch2.setStyleSheet("color: #FFC107;")
+        meas_layout.addWidget(self.meas_label_ch2)
         
-        uart_layout.addWidget(QLabel("Baud Rate"))
-        self.baud_select = QComboBox()
-        self.baud_select.addItems(["9600", "57600", "115200", "230400", "460800", "921600"])
-        self.baud_select.setCurrentText("115200")
-        uart_layout.addWidget(self.baud_select)
+        meas_group.setLayout(meas_layout)
+        controls.addWidget(meas_group)
+
         
-        uart_group.setLayout(uart_layout)
-        controls.addWidget(uart_group)
 
         # ===== Export Group =====
         export_group = QGroupBox("Export")
@@ -401,8 +424,8 @@ class MainWindow(QMainWindow):
         x_pos = 0
         
         # Calculate scaled trigger voltages
-        trig_v_ch1 = (self.threshold_ch1 * VREF / ADC_MAX) * self.voltage_mult_ch1
-        trig_v_ch2 = (self.threshold_ch2 * VREF / ADC_MAX) * self.voltage_mult_ch2
+        trig_v_ch1 = (self.threshold_ch1 * VREF / ADC_MAX) * VOLTAGE_MULT_CH1 * self.voltage_mult_ch1
+        trig_v_ch2 = (self.threshold_ch2 * VREF / ADC_MAX) * VOLTAGE_MULT_CH2 * self.voltage_mult_ch2
         
         # Position arrows at left edge
         self.trigger_arrow_ch1.setPos(x_pos, trig_v_ch1)
@@ -451,7 +474,7 @@ class MainWindow(QMainWindow):
     def update_threshold_ch1(self):
         self.threshold_ch1 = self.th_slider_ch1.value()
         # Update voltage label (with multiplier applied)
-        voltage = (self.threshold_ch1 * VREF / ADC_MAX) * self.voltage_mult_ch1
+        voltage = (self.threshold_ch1 * VREF / ADC_MAX) * VOLTAGE_MULT_CH1* self.voltage_mult_ch1
         self.th_label_ch1.setText(f"{voltage:.2f} V")
         # Update trigger arrow position
         self.update_trigger_arrows()
@@ -459,15 +482,17 @@ class MainWindow(QMainWindow):
     def update_threshold_ch2(self):
         self.threshold_ch2 = self.th_slider_ch2.value()
         # Update voltage label (with multiplier applied)
-        voltage = (self.threshold_ch2 * VREF / ADC_MAX) * self.voltage_mult_ch2
+        voltage = (self.threshold_ch2 * VREF / ADC_MAX) * VOLTAGE_MULT_CH2 * self.voltage_mult_ch2
         self.th_label_ch2.setText(f"{voltage:.2f} V")
         # Update trigger arrow position
         self.update_trigger_arrows()
     
     def update_time_scale(self):
         # Unified time scale
-        self.time_per_div = self.time_slider.value() / 1000.0  # convert to seconds
-        self.time_label.setText(f"{self.time_slider.value() / 10.0:.1f} ms/div")
+        # Slider 1-100. Factor 0.02 -> 0.02ms to 2ms per div
+        ms_per_div = self.time_slider.value() * 0.02
+        self.time_per_div = ms_per_div / 1000.0
+        self.time_label.setText(f"{ms_per_div:.3f} ms/div")
     
     def update_volt_mult_ch1(self):
         try:
@@ -522,8 +547,8 @@ class MainWindow(QMainWindow):
             self.cursor1.setAngle(90)
             self.cursor2.setAngle(90)
             # Place roughly inside current x-range
-            self.cursor1.setValue(0)
-            self.cursor2.setValue(100)
+            self.cursor1.setValue(0.0)
+            self.cursor2.setValue(0.002)
         else:
             self.cursor1.setAngle(0)
             self.cursor2.setAngle(0)
@@ -538,6 +563,50 @@ class MainWindow(QMainWindow):
         self.cursor1.setVisible(visible)
         self.cursor2.setVisible(visible)
 
+    def calculate_measurements(self, data, fs):
+        """Calculate basic wave characteristics: Freq, Vpp, Vavg, Vmin, Vmax"""
+        if not data or len(data) < 10:
+            return None
+            
+        arr = np.array(data)
+        v_min = np.min(arr)
+        v_max = np.max(arr)
+        v_pp = v_max - v_min
+        v_avg = np.mean(arr)
+        
+        # Frequency detection using FFT
+        # Remove DC component for FFT
+        arr_ac = arr - v_avg
+        n = len(arr_ac)
+        
+        # Windowing to reduce leakage
+        window = np.hanning(n)
+        fft_res = np.fft.rfft(arr_ac * window)
+        freqs = np.fft.rfftfreq(n, 1/fs)
+        mags = np.abs(fft_res)
+        
+        # Find peak
+        # Ignore very low frequencies (near DC)
+        idx = np.argmax(mags[1:]) + 1
+        peak_freq = freqs[idx]
+        peak_mag = mags[idx]
+        
+        # Simple heuristic: is peak distinct?
+        # Compare peak to average magnitude
+        avg_mag = np.mean(mags)
+        if peak_mag > 3 * avg_mag:
+            freq = peak_freq
+        else:
+            freq = None
+            
+        return {
+            "v_pp": v_pp,
+            "v_avg": v_avg,
+            "v_min": v_min,
+            "v_max": v_max,
+            "freq": freq
+        }
+
     # --------------------------------------------------------
     # UART handling
     # --------------------------------------------------------
@@ -545,7 +614,7 @@ class MainWindow(QMainWindow):
         self.use_uart = self.use_uart_btn.isChecked()
         if self.use_uart:
             port = self.com_select.currentText()
-            baud = int(self.baud_select.currentText())
+            baud = 921600
             # clear any old queue items
             with self.serial_queue.mutex:
                 self.serial_queue.queue.clear()
@@ -554,7 +623,7 @@ class MainWindow(QMainWindow):
             self.serial_reader.start()
             # small delay to allow thread to try open
             time.sleep(0.05)
-            self.update_button_text(self.use_uart_btn, "Using UART", "Using Fake Data")
+            self.update_button_text(self.use_uart_btn, "Using USB", "Using Fake Data")
         else:
             # stop reader
             if self.serial_reader:
@@ -676,18 +745,18 @@ class MainWindow(QMainWindow):
 
         if self.cursor_vertical:
             # Vertical cursors → time measurement
-            x1 = self.cursor1.value()
-            x2 = self.cursor2.value()
-            # interpret x as sample index if reasonable, else clamp
-            i1 = int(max(0, min(N - 1, x1)))
-            i2 = int(max(0, min(N - 1, x2)))
+            t1 = self.cursor1.value()
+            t2 = self.cursor2.value()
+            # interpret x as time (seconds)
+            i1 = int(max(0, min(N - 1, t1 * Fs)))
+            i2 = int(max(0, min(N - 1, t2 * Fs)))
             v1_ch1 = ch1_data[i1]
             v2_ch1 = ch1_data[i2]
             dv_ch1 = v2_ch1 - v1_ch1
-            dt = abs(x2 - x1) / Fs
+            dt = abs(t2 - t1)
             text = (
-                f"P1: {i1} → CH1:{v1_ch1:.3f} V\n"
-                f"P2: {i2} → CH1:{v2_ch1:.3f} V\n"
+                f"P1: {t1:.6f}s ({i1}) → CH1:{v1_ch1:.3f} V\n"
+                f"P2: {t2:.6f}s ({i2}) → CH1:{v2_ch1:.3f} V\n"
                 f"ΔV(CH1) = {dv_ch1:.3f} V\n"
                 f"Δt = {dt:.6f} s"
             )
@@ -707,7 +776,7 @@ class MainWindow(QMainWindow):
         # Position text at a fixed location relative to data (top-right of data range)
         # Use the last sample index and max voltage in data
         if ch1_data:
-            x_pos = N - 1  # Right edge of data
+            x_pos = (N - 1) / Fs  # Right edge of data in time
             y_pos = self.y_max  # Top of current y range
             self.cursor_text.setPos(x_pos, y_pos)
 
@@ -847,14 +916,14 @@ class MainWindow(QMainWindow):
             volts_ch2 = volts_dict['ch2']
 
         # Apply offsets and voltage multipliers
-        volts_ch1 = [(v + self.ch1_offset) * self.voltage_mult_ch1 for v in volts_ch1]
-        volts_ch2 = [(v + self.ch2_offset) * self.voltage_mult_ch2 for v in volts_ch2]
+        volts_ch1 = [(v + self.ch1_offset) * VOLTAGE_MULT_CH1 * self.voltage_mult_ch1 for v in volts_ch1]
+        volts_ch2 = [(v + self.ch2_offset) * VOLTAGE_MULT_CH2 * self.voltage_mult_ch2 for v in volts_ch2]
 
         self.last_data_volts = {'ch1': volts_ch1, 'ch2': volts_ch2}
 
         if not self.fft_mode:
             # TIME DOMAIN
-            self.plot.setLabel("bottom", "Samples")
+            self.plot.setLabel("bottom", "Time (s)")
             self.plot.setLabel("left", "Volts")
             
             if self.auto_scale_enabled:
@@ -873,9 +942,10 @@ class MainWindow(QMainWindow):
                     target_y_max = curr_max + margin
                     
                     # X axis: immediate scaling with offset padding
-                    padding = int(N * 0.02)  # 5% padding on each side
-                    target_x_min = -padding
-                    target_x_max = N + padding
+                    padding_samples = int(N * 0.02)
+                    padding_time = padding_samples / FAKE_FS
+                    target_x_min = -padding_time
+                    target_x_max = (N + padding_samples) / FAKE_FS
                     
                     # Apply X-axis immediately (no delay)
                     self.x_min = target_x_min
@@ -910,10 +980,13 @@ class MainWindow(QMainWindow):
                 self.plot.disableAutoRange()
             
             # Update both channel curves
+            # Create time axis
+            t = np.arange(len(volts_ch1)) / FAKE_FS
+            
             if self.ch1_enabled:
-                self.curve_ch1.setData(volts_ch1)
+                self.curve_ch1.setData(t, volts_ch1)
             if self.ch2_enabled:
-                self.curve_ch2.setData(volts_ch2)
+                self.curve_ch2.setData(t, volts_ch2)
             
             # Update trigger arrows position
             self.update_trigger_arrows()
@@ -921,6 +994,36 @@ class MainWindow(QMainWindow):
             # Keep cursor visibility up to date and refresh readout
             self.apply_cursor_visibility()
             self.update_cursors()
+            
+            # Update Measurements
+            if self.ch1_enabled and volts_ch1:
+                m1 = self.calculate_measurements(volts_ch1, FAKE_FS)
+                if m1:
+                    f_str = f"{m1['freq']:.1f} Hz" if m1['freq'] else "--"
+                    self.meas_label_ch1.setText(
+                        f"Freq: {f_str}\n"
+                        f"Vpp:  {m1['v_pp']:.2f} V\n"
+                        f"Vavg: {m1['v_avg']:.2f} V"
+                    )
+                else:
+                    self.meas_label_ch1.setText("Freq: --\nVpp: --\nVavg: --")
+            else:
+                self.meas_label_ch1.setText("Channel Off")
+                
+            if self.ch2_enabled and volts_ch2:
+                m2 = self.calculate_measurements(volts_ch2, FAKE_FS)
+                if m2:
+                    f_str = f"{m2['freq']:.1f} Hz" if m2['freq'] else "--"
+                    self.meas_label_ch2.setText(
+                        f"Freq: {f_str}\n"
+                        f"Vpp:  {m2['v_pp']:.2f} V\n"
+                        f"Vavg: {m2['v_avg']:.2f} V"
+                    )
+                else:
+                    self.meas_label_ch2.setText("Freq: --\nVpp: --\nVavg: --")
+            else:
+                self.meas_label_ch2.setText("Channel Off")
+
             return
 
         # FFT MODE (magnitude spectrum)
