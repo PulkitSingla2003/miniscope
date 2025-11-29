@@ -1,2 +1,4 @@
-uart_rx_buffer
+adc_buf
 adc_val
+CDC_Ready
+CDC_Transmit_FS
