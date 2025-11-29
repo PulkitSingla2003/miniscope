@@ -3,3 +3,6 @@ uart_transmit/
 .zip/
 *.zip 
 gui/notes.txt
+*.DS_Store
+*.metadata
+.metadata/
